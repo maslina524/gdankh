@@ -27,7 +27,9 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
 ]
 
-dependencies = []
+dependencies = [
+    "websocket-client"
+]
 
 [project.optional-dependencies]
 dev = []
