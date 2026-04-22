@@ -7,6 +7,7 @@ class Editor:
     def __init__(self):
         self._ws
         self.level_string
+        self.objects = []
 
     def _ws_send(self, json_data) -> str | None:
         self._ws.send(json.dumps(json_data))
@@ -34,8 +35,16 @@ class Editor:
 
         ret = cls._ws_send(cls, {"action": "GET_LEVEL_STRING", "close": False})
         cls.level_string = ret
-    
+
+        cls._parse_level_string()
+
         return cls
+    
+    def add_object(self, obj: GameObject):
+        if isinstance(obj, GameObject):
+            self.objects.append(obj)
+        else:
+            raise TypeError(f"Expected `GameObject`, got `{type(obj).__name__}`")
     
 if __name__ == "__main__":
     editor = Editor.load_ws()

@@ -10,3 +10,8 @@ class ServerError(Exception):
     def __init__(self, msg: str):
         self.msg = msg
         super().__init__(f"Server error: {self.msg}")
+
+class UnknownPropID(Exception):
+    def __init__(self, id: int):
+        self.id = id
+        super().__init__(f"Unknown prop id: {self.id}")
