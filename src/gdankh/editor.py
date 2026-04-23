@@ -55,7 +55,8 @@ class Editor:
             self._ws_send({"action": "ADD_OBJECTS", "objects": ret, "close": True})
 
 if __name__ == "__main__":
-    editor = Editor.load_ws()
-    obj = GameObject.from_string("1,914,2,15,3,45;")
-    editor.add_object(obj)
-    editor.save()
+    # editor = Editor.load_ws()
+    obj = GameObject.from_string("1,914,2,15,4,1,3,45,57,42.55.88;")
+    print(obj.get_level_string())
+    # editor.add_object(obj)
+    # editor.save()

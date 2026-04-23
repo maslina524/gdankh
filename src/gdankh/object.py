@@ -17,6 +17,8 @@ class GameObject:
                     return float(v)
                 case "bool":
                     return v == "1"
+                case "grouplist":
+                    return list(int(x) for x in v.split("."))
                 case _:
                     return v
         else:
@@ -42,7 +44,17 @@ class GameObject:
         parts = []
         for i, v in enumerate(self._props):
             if v != None:
-                parts.append(f"{i},{v}")
+                parts.append(str(i))
+
+                match TYPES.get(str(i)):
+                    case "bool":
+                        parts.append("1" if v else "0")
+                        
+                    case "grouplist":
+                        parts.append(".".join(str(g) for g in v))
+
+                    case _:
+                        parts.append(str(v))
         
         ret = ",".join(parts) + ";"
         return ret
