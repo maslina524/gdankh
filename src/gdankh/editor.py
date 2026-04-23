@@ -56,7 +56,7 @@ class Editor:
 
 if __name__ == "__main__":
     # editor = Editor.load_ws()
-    obj = GameObject.from_string("1,914,2,15,4,1,3,45,57,42.55.88;")
+    obj = GameObject.from_kwargs(id = 1, x = 15, y = 45, _57 = [42, 55, 88])
     print(obj.get_level_string())
     # editor.add_object(obj)
     # editor.save()

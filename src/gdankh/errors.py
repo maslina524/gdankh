@@ -15,3 +15,8 @@ class UnknownPropID(Exception):
     def __init__(self, id: int):
         self.id = id
         super().__init__(f"Unknown prop id: {self.id}")
+
+class UnknownPropName(Exception):
+    def __init__(self, name: str):
+        self.name = name
+        super().__init__(f"Unknown prop name: {self.name}")

@@ -1,60 +1,80 @@
 from typing import Any
 from utils import chunks
-from props import TYPES
-from errors import UnknownPropID
+from props import TYPES, NAME_TO_ID
+from errors import UnknownPropID, UnknownPropName
 
 class GameObject:
     def __init__(self):
         self._props = [None] * 600
         self._level_string = ""
 
-    def _value_type_by_id(self, v: str, i: int) -> Any:
-        if i in TYPES:
-            match TYPES.get(i):
-                case "int":
-                    return int(v)
-                case "float":
-                    return float(v)
-                case "bool":
-                    return v == "1"
-                case "grouplist":
-                    return list(int(x) for x in v.split("."))
-                case _:
-                    return v
-        else:
-            raise UnknownPropID(i)
+    def _value_type_by_id(self, id: int, v: str) -> Any:
+        type_name = TYPES.get(str(id))
+        if type_name is None:
+            raise UnknownPropID(id)
+        match type_name:
+            case "int":
+                return int(v)
+            case "float":
+                return float(v)
+            case "bool":
+                return v == "1"
+            case "grouplist":
+                return [int(x) for x in v.split(".")] if v else []
+            case _:
+                return v
+
+    def _type_to_string(self, id: int, value: Any) -> str:
+        type_name = TYPES.get(str(id))
+        if type_name is None:
+            raise UnknownPropID(id)
+        match type_name:
+            case "bool":
+                return "1" if value else "0"
+            case "grouplist":
+                return ".".join(str(x) for x in value)
+            case _:
+                return str(value)
 
     @classmethod
     def from_string(cls, string: str):
         obj = cls()
         string = string.rstrip(";")
-
-        obj_chunks = chunks(string.split(","), 2)
-        for p_id_str, p_value in obj_chunks:
+        pairs = chunks(string.split(","), 2)
+        for p_id_str, p_value in pairs:
             p_id = int(p_id_str)
-            obj._props[p_id] = obj._value_type_by_id(p_value, p_id_str)
+            converted = obj._value_type_by_id(p_id, p_value)
+            obj.set_prop(p_id, converted)
         return obj
-    
+
+    @classmethod
+    def from_kwargs(cls, **kwargs):
+        obj = cls()
+        for k, v in kwargs.items():
+            if k.startswith("_"):
+                p_id = int(k.lstrip("_"))
+            else:
+                p_id = NAME_TO_ID.get(k)
+                if p_id is None:
+                    raise UnknownPropName(k)
+            obj.set_prop(p_id, v)
+        return obj
+
     def get_prop(self, id: int):
         if id < 1 or id > 599:
             raise ValueError("The number is not within the acceptable limits (1-599)")
         return self._props[id]
-    
+
+    def set_prop(self, id: int, value: Any):
+        if id < 1 or id > 599:
+            raise ValueError("The number is not within the acceptable limits (1-599)")
+        self._props[id] = value
+
     def get_level_string(self) -> str:
         parts = []
-        for i, v in enumerate(self._props):
-            if v != None:
+        for i in range(1, 600):
+            v = self._props[i]
+            if v is not None:
                 parts.append(str(i))
-
-                match TYPES.get(str(i)):
-                    case "bool":
-                        parts.append("1" if v else "0")
-                        
-                    case "grouplist":
-                        parts.append(".".join(str(g) for g in v))
-
-                    case _:
-                        parts.append(str(v))
-        
-        ret = ",".join(parts) + ";"
-        return ret
+                parts.append(self._type_to_string(i, v))
+        return ",".join(parts) + ";"

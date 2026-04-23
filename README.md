@@ -36,7 +36,7 @@ pip install .
 
 ## TODO list
 
-- [ ] Add object creation via kwargs
+- [x] Add object creation via kwargs
 - [ ] Automatic port detection for WebSocket
 - [ ] Changing the level via CCLocalLevels (vanilla)
 - [ ] Detailed level string editing
