@@ -31,7 +31,6 @@ class GameObject:
         for p_id_str, p_value in obj_chunks:
             p_id = int(p_id_str)
             obj._props[p_id] = obj._value_type_by_id(p_value, p_id_str)
-        print(obj._props)
         return obj
     
     def get_level_string(self) -> str:
@@ -42,7 +41,3 @@ class GameObject:
         
         ret = ",".join(parts) + ";"
         return ret
-    
-if __name__ == "__main__":
-    obj = GameObject.from_string("1,914,2,15,3,45;")
-    print(obj.get_level_string())

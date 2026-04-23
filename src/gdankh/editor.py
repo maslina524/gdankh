@@ -1,12 +1,13 @@
 import websocket, json
 from errors import WsConnectFailed, EditorActionOnly, ServerError
+from object import GameObject
 
 DEFAULT_URI = "ws://localhost:1313"
 
 class Editor:
     def __init__(self):
-        self._ws
-        self.level_string
+        self._ws = None
+        self.level_string = None
         self.objects = []
 
     def _ws_send(self, json_data) -> str | None:
@@ -27,25 +28,35 @@ class Editor:
 
     @classmethod
     def load_ws(cls):
-        cls._ws = websocket.WebSocket()
+        # Создаём экземпляр
+        instance = cls()
+        instance._ws = websocket.WebSocket()
         try:
-            cls._ws.connect(DEFAULT_URI, timeout=3)
+            instance._ws.connect(DEFAULT_URI, timeout=3)
         except:
             raise WsConnectFailed()
 
-        ret = cls._ws_send(cls, {"action": "GET_LEVEL_STRING", "close": False})
-        cls.level_string = ret
+        ret = instance._ws_send({"action": "GET_LEVEL_STRING", "close": False})
+        instance.level_string = ret
 
-        cls._parse_level_string()
-
-        return cls
+        # instance._parse_level_string()
+        return instance
     
     def add_object(self, obj: GameObject):
         if isinstance(obj, GameObject):
             self.objects.append(obj)
         else:
             raise TypeError(f"Expected `GameObject`, got `{type(obj).__name__}`")
-    
+        
+    def save(self):
+        if len(self.objects) > 0:
+            ret = ""
+            for obj in self.objects:
+                ret += obj.get_level_string()
+            self._ws_send({"action": "ADD_OBJECTS", "objects": ret, "close": True})
+
 if __name__ == "__main__":
     editor = Editor.load_ws()
-    print(editor.level_string[:2000])
+    obj = GameObject.from_string("1,914,2,15,3,45;")
+    editor.add_object(obj)
+    editor.save()
