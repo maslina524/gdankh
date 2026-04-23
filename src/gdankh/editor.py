@@ -1,8 +1,10 @@
 import websocket, json
 from errors import WsConnectFailed, EditorActionOnly, ServerError
 from object import GameObject
+from saveload import get_gd_appdata_path
 
 DEFAULT_URI = "ws://localhost:1313"
+DEFAULT_PORT = 1313
 
 class Editor:
     def __init__(self):
@@ -26,12 +28,20 @@ class Editor:
             err_msg = ret.get("error", "")
             raise ServerError(err_msg)
 
+    def _get_port(self) -> int:
+        path = get_gd_appdata_path() / 'geode' / 'mods' / 'iandyhd3.wsliveeditor' / 'settings.json'
+        try:
+            with open(path) as f:
+                return json.load(f).get('ws-port') or DEFAULT_PORT
+        except (FileNotFoundError, json.JSONDecodeError):
+            return DEFAULT_PORT
+
     @classmethod
     def load_ws(cls):
         instance = cls()
         instance._ws = websocket.WebSocket()
         try:
-            instance._ws.connect(DEFAULT_URI, timeout=3)
+            instance._ws.connect(f"ws://localhost:{instance._get_port()}", timeout=3)
         except:
             raise WsConnectFailed()
 
