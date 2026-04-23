@@ -75,7 +75,7 @@ class GameObject:
             raise ValueError("The number is not within the acceptable limits (1-599)")
         self._props[id] = value
 
-    def get_level_string(self) -> str:
+    def get_string(self) -> str:
         parts = []
         for i in range(1, 600):
             v = self._props[i]

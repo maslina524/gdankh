@@ -61,12 +61,12 @@ class Editor:
         if len(self.objects) > 0:
             ret = ""
             for obj in self.objects:
-                ret += obj.get_level_string()
+                ret += obj.get_string()
             self._ws_send({"action": "ADD_OBJECTS", "objects": ret, "close": True})
 
 if __name__ == "__main__":
     # editor = Editor.load_ws()
     obj = GameObject.from_kwargs(id = 1, x = 15, y = 45, _57 = [42, 55, 88], text = "Hello World")
-    print(obj.get_level_string())
+    print(obj.get_string())
     # editor.add_object(obj)
     # editor.save()
