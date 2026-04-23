@@ -26,7 +26,7 @@ TYPES = {
     "28": "int",   # move_x
     "29": "int",   # offset
     "30": "easing",   # easing
-    "31": "string",   # text
+    "31": "b64string",   # text
     "32": "float",   # scale
     "33": "int",   # single_group
     "34": "bool",   # group_parent

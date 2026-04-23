@@ -2,33 +2,38 @@ from typing import Any
 from utils import chunks
 from props import TYPES, NAME_TO_ID
 from errors import UnknownPropID, UnknownPropName
+from base64 import b64encode, b64decode
 
 class GameObject:
     def __init__(self):
         self._props = [None] * 600
         self._level_string = ""
 
-    def _value_type_by_id(self, id: int, v: str) -> Any:
+    def _value_type_by_id(self, id: int, value: str) -> Any:
         type_name = TYPES.get(str(id))
         if type_name is None:
             raise UnknownPropID(id)
         match type_name:
             case "int":
-                return int(v)
+                return int(value)
             case "float":
-                return float(v)
+                return float(value)
             case "bool":
-                return v == "1"
+                return value == "1"
+            case "b64string":
+                return b64decode(str(value).encode()).decode()
             case "grouplist":
-                return [int(x) for x in v.split(".")] if v else []
+                return [int(x) for x in value.split(".")] if value else []
             case _:
-                return v
+                return value
 
     def _type_to_string(self, id: int, value: Any) -> str:
         type_name = TYPES.get(str(id))
         if type_name is None:
             raise UnknownPropID(id)
         match type_name:
+            case "b64string":
+                return b64encode(str(value).encode()).decode()
             case "bool":
                 return "1" if value else "0"
             case "grouplist":
