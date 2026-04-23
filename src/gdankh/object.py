@@ -33,6 +33,11 @@ class GameObject:
             obj._props[p_id] = obj._value_type_by_id(p_value, p_id_str)
         return obj
     
+    def get_prop(self, id: int):
+        if id < 1 or id > 599:
+            raise ValueError("The number is not within the acceptable limits (1-599)")
+        return self._props[id]
+    
     def get_level_string(self) -> str:
         parts = []
         for i, v in enumerate(self._props):

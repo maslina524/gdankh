@@ -28,7 +28,6 @@ class Editor:
 
     @classmethod
     def load_ws(cls):
-        # Создаём экземпляр
         instance = cls()
         instance._ws = websocket.WebSocket()
         try:
