@@ -10,7 +10,7 @@ class Editor:
     def __init__(self):
         self._ws = None
         self.level_string = None
-        self.objects = []
+        self.ret_level_string = None
 
     def _ws_send(self, json_data) -> str | None:
         self._ws.send(json.dumps(json_data))
@@ -47,26 +47,24 @@ class Editor:
 
         ret = instance._ws_send({"action": "GET_LEVEL_STRING", "close": False})
         instance.level_string = ret
+        instance.ret_level_string = ret
 
         # instance._parse_level_string()
         return instance
     
     def add_object(self, obj: GameObject):
         if isinstance(obj, GameObject):
-            self.objects.append(obj)
+            self.ret_level_string += obj.get_string()
         else:
             raise TypeError(f"Expected `GameObject`, got `{type(obj).__name__}`")
         
     def save(self):
-        if len(self.objects) > 0:
-            ret = ""
-            for obj in self.objects:
-                ret += obj.get_string()
-            self._ws_send({"action": "ADD_OBJECTS", "objects": ret, "close": True})
+        if self.ret_level_string != self.level_string:
+            self._ws_send({"action": "REPLACE_LEVEL_STRING", "levelString": self.ret_level_string, "close": True})
 
 if __name__ == "__main__":
-    # editor = Editor.load_ws()
+    editor = Editor.load_ws()
     obj = GameObject.from_kwargs(id = 1, x = 15, y = 45, _57 = [42, 55, 88], text = "Hello World")
     print(obj.get_string())
-    # editor.add_object(obj)
-    # editor.save()
+    editor.add_object(obj)
+    editor.save()
