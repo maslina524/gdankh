@@ -16,7 +16,7 @@ class GameObject:
                 case "float":
                     return float(v)
                 case "bool":
-                    return v.lower() in ("true", "1", "yes")
+                    return v == "1"
                 case _:
                     return v
         else:
