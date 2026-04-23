@@ -11,6 +11,7 @@ from gdankh import Editor, Object
 
 editor = Editor.load_ws()
 obj = Object.from_string("1,1,2,15,3,15;")
+editor.add_object(obj)
 editor.save()
 ```
 
@@ -32,3 +33,18 @@ cd C:/.../gdankh/
 ```bash
 pip install .
 ```
+
+## TODO list
+
+- [ ] Add object creation via kwargs
+- [ ] Automatic port detection for WebSocket
+- [ ] Changing the level via CCLocalLevels (vanilla)
+- [ ] Detailed level string editing
+    - [ ] Color channel editing
+    - [ ] Level meta settings editing
+- [ ] Function decorators
+    - [ ] `group` decorator
+    - [ ] `layer` decorator
+    - [ ] `z_layer` decorator
+    - [ ] `hsv` decorator
+    - [ ] `loop` decorator
