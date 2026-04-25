@@ -40,7 +40,7 @@ pip install .
 - [x] Automatic port detection for WebSocket
 - [ ] Changing the level via CCLocalLevels (vanilla)
 - [ ] Detailed level string editing
-    - [ ] Color channel editing
+    - [x] Color channel editing
     - [ ] Level meta settings editing
 - [ ] Function decorators
     - [ ] `group` decorator
