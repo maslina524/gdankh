@@ -3,15 +3,15 @@ from utils import chunks
 
 class ColorChannel:
     def __init__(self):
-        from_r: int
-        from_g: int
-        from_b: int
+        r: int
+        g: int
+        b: int
         p_color: PlayerColor
         blending: bool
         color_i: int
         from_opacity: float
         toggle_opacity: bool
-        inherited_color_i: int
+        copied_color_i: int
         hsv: Hsv
         to_r: int
         to_g: int
@@ -34,11 +34,11 @@ class ColorChannel:
             v = chunk[1]
             match int(chunk[0]): # key
                 case 1:
-                    instance.from_r = int(v)
+                    instance.r = int(v)
                 case 2:
-                    instance.from_g = int(v)
+                    instance.g = int(v)
                 case 3:
-                    instance.from_b = int(v)
+                    instance.b = int(v)
                 case 4:
                     instance.p_color = PlayerColor(int(v))
                 case 5:
@@ -50,7 +50,7 @@ class ColorChannel:
                 case 8:
                     instance.toggle_opacity = bool(int(v))
                 case 9:
-                    instance.inherited_color_i = int(v)
+                    instance.copied_color_i = int(v)
                 case 10:
                     instance.hsv = Hsv.from_string(v)
                 case 11:
@@ -73,12 +73,12 @@ class ColorChannel:
     def __str__(self):
         ret = []
         
-        if hasattr(self, 'from_r'):
-            ret.append(f"1_{self.from_r}")
-        if hasattr(self, 'from_g'):
-            ret.append(f"2_{self.from_g}")
-        if hasattr(self, 'from_b'):
-            ret.append(f"3_{self.from_b}")
+        if hasattr(self, 'r'):
+            ret.append(f"1_{self.r}")
+        if hasattr(self, 'g'):
+            ret.append(f"2_{self.g}")
+        if hasattr(self, 'b'):
+            ret.append(f"3_{self.b}")
         
         if hasattr(self, 'p_color'):
             ret.append(f"4_{self.p_color.value}")
@@ -95,8 +95,8 @@ class ColorChannel:
         if hasattr(self, 'toggle_opacity'):
             ret.append(f"8_{int(self.toggle_opacity)}")
         
-        if hasattr(self, 'inherited_color_i'):
-            ret.append(f"9_{self.inherited_color_i}")
+        if hasattr(self, 'copied_color_i'):
+            ret.append(f"9_{self.copied_color_i}")
         
         if hasattr(self, 'hsv'):
             ret.append(f"10_{self.hsv}")
