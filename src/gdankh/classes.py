@@ -26,7 +26,6 @@ class ColorChannel:
         instance = cls()
 
         color_chunks = chunks(string.split("_"), 2)
-        print(color_chunks)
         if len(color_chunks) < 3:
             return instance
             
@@ -70,6 +69,58 @@ class ColorChannel:
                     instance.copy_opacity = bool(int(v))
 
         return instance
+    
+    def __str__(self):
+        ret = []
+        
+        if hasattr(self, 'from_r'):
+            ret.append(f"1_{self.from_r}")
+        if hasattr(self, 'from_g'):
+            ret.append(f"2_{self.from_g}")
+        if hasattr(self, 'from_b'):
+            ret.append(f"3_{self.from_b}")
+        
+        if hasattr(self, 'p_color'):
+            ret.append(f"4_{self.p_color.value}")
+        
+        if hasattr(self, 'blending'):
+            ret.append(f"5_{1 if self.blending else 0}")
+        
+        if hasattr(self, 'color_i'):
+            ret.append(f"6_{self.color_i}")
+        
+        if hasattr(self, 'from_opacity'):
+            ret.append(f"7_{self.from_opacity}")
+        
+        if hasattr(self, 'toggle_opacity'):
+            ret.append(f"8_{int(self.toggle_opacity)}")
+        
+        if hasattr(self, 'inherited_color_i'):
+            ret.append(f"9_{self.inherited_color_i}")
+        
+        if hasattr(self, 'hsv'):
+            ret.append(f"10_{self.hsv}")
+        
+        if hasattr(self, 'to_r'):
+            ret.append(f"11_{self.to_r}")
+        if hasattr(self, 'to_g'):
+            ret.append(f"12_{self.to_g}")
+        if hasattr(self, 'to_b'):
+            ret.append(f"13_{self.to_b}")
+        
+        if hasattr(self, 'delta_time'):
+            ret.append(f"14_{self.delta_time}")
+        
+        if hasattr(self, 'to_opacity'):
+            ret.append(f"15_{self.to_opacity}")
+        
+        if hasattr(self, 'duration'):
+            ret.append(f"16_{self.duration}")
+        
+        if hasattr(self, 'copy_opacity'):
+            ret.append(f"17_{int(self.copy_opacity)}")
+        
+        return "_".join(ret)
     
 class Hsv:
     def __init__(self):
