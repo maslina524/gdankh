@@ -96,7 +96,8 @@ class Editor:
 
         # color string
         color_strings = []
-        for c in list(self._ret_color_channels.values()):
+        for k, c in list(self._ret_color_channels.items()):
+            c.color_i = k
             color_strings.append(f"{c}")
         color_ret = '|'.join(color_strings)
         start_parts.append(f"kS38,{color_ret}|")
@@ -112,6 +113,5 @@ class Editor:
 
 if __name__ == "__main__":
     editor = Editor.load_ws()
-    print(editor.color_channels.get(1))
-    input()
+    editor.color_channels[10] = ColorChannel.from_string("1_10_2_10_3_10_4_-1_6_15_7_1.0_8_1_10_-86a-0.78a0.28a1a1_11_2_12_2_13_2_15_1.0")
     editor.save()
